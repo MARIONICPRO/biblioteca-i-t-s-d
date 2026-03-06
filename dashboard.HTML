@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Escolar - Dashboard</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="navbar">
+            <h2>📚 Biblioteca Escolar</h2>
+            <div class="user-info">
+                <span>Bienvenido, <span id="usuarioNombre"></span></span>
+                <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="menu-container">
+            <h1>Panel de Administración</h1>
+            
+            <div class="menu-grid">
+                <div class="menu-card" onclick="window.location.href='estudiantes.html'">
+                    <div class="menu-icon">👥</div>
+                    <h3>Estudiantes</h3>
+                    <p>Gestionar estudiantes: registrar, editar, activar/desactivar</p>
+                </div>
+                
+                <div class="menu-card" onclick="window.location.href='libros.html'">
+                    <div class="menu-icon">📚</div>
+                    <h3>Libros</h3>
+                    <p>Gestionar libros: registrar, editar, controlar disponibilidad</p>
+                </div>
+                
+                <div class="menu-card" onclick="window.location.href='prestamos.html'">
+                    <div class="menu-icon">📖</div>
+                    <h3>Préstamos</h3>
+                    <p>Registrar préstamos y devoluciones</p>
+                </div>
+                
+                <div class="menu-card" onclick="window.location.href='reportes.html'">
+                    <div class="menu-icon">📊</div>
+                    <h3>Reportes</h3>
+                    <p>Consultas e informes del sistema</p>
+                </div>
+            </div>
+
+            <div class="resumen">
+                <h2>Resumen del Sistema</h2>
+                <div class="stats-grid" id="resumenStats">
+                    <div class="stat-card">Cargando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Verificar sesión
+        if(!sessionStorage.getItem("usuarioId")) {
+            window.location.href = "index.html"
+        }
+
+        document.getElementById("usuarioNombre").textContent = 
+            sessionStorage.getItem("usuarioNombre")
+
+        // Cargar resumen
+        async function cargarResumen() {
+            try {
+                // Total estudiantes activos
+                const { count: estudiantesActivos } = await cliente
+                    .from('estudiantes')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('estado', true)
+
+                // Total libros con ejemplares disponibles
+                const { data: libros } = await cliente
+                    .from('libros')
+                    .select('cantidad_disponible')
+                
+                const librosDisponibles = libros?.reduce((total, libro) => 
+                    total + (libro.cantidad_disponible || 0), 0) || 0
+
+                // Préstamos activos
+                const { count: prestamosActivos } = await cliente
+                    .from('prestamos')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('estado', 'activo')
+
+                // Préstamos retrasados
+                const hoy = new Date().toISOString().split('T')[0]
+                const { count: prestamosRetrasados } = await cliente
+                    .from('prestamos')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('estado', 'activo')
+                    .lt('fecha_estimada_devolucion', hoy)
+
+                document.getElementById('resumenStats').innerHTML = `
+                    <div class="stat-card">
+                        <h3>${estudiantesActivos || 0}</h3>
+                        <p>Estudiantes Activos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>${librosDisponibles}</h3>
+                        <p>Ejemplares Disponibles</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>${prestamosActivos || 0}</h3>
+                        <p>Préstamos Activos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>${prestamosRetrasados || 0}</h3>
+                        <p>Préstamos Retrasados</p>
+                    </div>
+                `
+            } catch(error) {
+                console.error('Error cargando resumen:', error)
+                document.getElementById('resumenStats').innerHTML = 
+                    '<div class="stat-card">Error al cargar datos</div>'
+            }
+        }
+
+        cargarResumen()
+    </script>
+</body>
+</html>

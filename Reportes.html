@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Biblioteca Escolar</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <nav class="navbar">
+            <h2>📊 Reportes del Sistema</h2>
+            <div>
+                <button onclick="window.location.href='dashboard.html'" class="btn-back">← Volver</button>
+                <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="reportes-grid">
+                <!-- Reporte 1: Libros disponibles -->
+                <div class="reporte-card">
+                    <h3>📚 Libros Disponibles</h3>
+                    <div class="reporte-content" id="librosDisponibles">
+                        Cargando...
+                    </div>
+                </div>
+
+                <!-- Reporte 2: Préstamos activos -->
+                <div class="reporte-card">
+                    <h3>📖 Préstamos Activos</h3>
+                    <div class="reporte-content" id="prestamosActivosReporte">
+                        Cargando...
+                    </div>
+                </div>
+
+                <!-- Reporte 3: Estudiantes con préstamos retrasados -->
+                <div class="reporte-card">
+                    <h3>⚠️ Préstamos Retrasados</h3>
+                    <div class="reporte-content" id="prestamosRetrasados">
+                        Cargando...
+                    </div>
+                </div>
+
+                <!-- Reporte 4: Estadísticas generales -->
+                <div class="reporte-card">
+                    <h3>📊 Estadísticas Generales</h3>
+                    <div class="reporte-content" id="estadisticas">
+                        Cargando...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Búsqueda de historial por estudiante -->
+            <div class="form-container">
+                <h3>🔍 Consultar Historial por Estudiante</h3>
+                <div class="form-grid">
+                    <select id="estudianteConsulta">
+                        <option value="">Seleccionar estudiante</option>
+                    </select>
+                    <button onclick="consultarHistorialEstudiante()" class="btn-primary">Consultar</button>
+                </div>
+                <div id="historialEstudiante" class="table-container" style="margin-top: 1rem; display: none;">
+                    <!-- Resultado de la consulta -->
+                </div>
+            </div>
+
+            <!-- Búsqueda de historial por libro -->
+            <div class="form-container">
+                <h3>🔍 Consultar Historial por Libro</h3>
+                <div class="form-grid">
+                    <select id="libroConsulta">
+                        <option value="">Seleccionar libro</option>
+                    </select>
+                    <button onclick="consultarHistorialLibro()" class="btn-primary">Consultar</button>
+                </div>
+                <div id="historialLibro" class="table-container" style="margin-top: 1rem; display: none;">
+                    <!-- Resultado de la consulta -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/reportes.js"></script>
+</body>
+</html>

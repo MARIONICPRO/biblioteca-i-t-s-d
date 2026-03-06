@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Préstamos</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <nav class="navbar">
+            <h2>📖 Gestión de Préstamos</h2>
+            <div>
+                <button onclick="window.location.href='dashboard.html'" class="btn-back">← Volver</button>
+                <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="content">
+            <!-- Formulario de Préstamo -->
+            <div class="form-container">
+                <h3>Registrar Nuevo Préstamo</h3>
+                
+                <div class="form-grid">
+                    <select id="estudiante_id" required>
+                        <option value="">Seleccionar Estudiante *</option>
+                    </select>
+                    
+                    <select id="libro_id" required>
+                        <option value="">Seleccionar Libro *</option>
+                    </select>
+                    
+                    <input type="date" id="fecha_prestamo" required>
+                    
+                    <input type="date" id="fecha_estimada_devolucion" required>
+                    
+                    <textarea id="observaciones" placeholder="Observaciones (opcional)" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button onclick="registrarPrestamo()" class="btn-primary">📌 Registrar Préstamo</button>
+                </div>
+                <p id="mensaje" class="message"></p>
+            </div>
+
+            <!-- Préstamos Activos -->
+            <div class="table-container">
+                <h3>Préstamos Activos</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Libro</th>
+                            <th>Fecha Préstamo</th>
+                            <th>Fecha Devolución</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prestamosActivosBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Cargando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Historial de Préstamos -->
+            <div class="table-container">
+                <h3>Historial de Préstamos</h3>
+                <input type="text" id="buscarHistorial" placeholder="🔍 Buscar en historial..." class="search-box">
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Libro</th>
+                            <th>Fecha Préstamo</th>
+                            <th>Fecha Devolución</th>
+                            <th>Estado</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historialBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Cargando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/prestamos.js"></script>
+</body>
+</html>

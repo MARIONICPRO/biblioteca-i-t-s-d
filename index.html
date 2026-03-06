@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Escolar - Login</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>Biblioteca Escolar</h1>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="mostrarTab('login')">Iniciar Sesión</button>
+                <button class="tab-btn" onclick="mostrarTab('registro')">Registrarse</button>
+            </div>
+
+            <!-- Formulario de Login -->
+            <div id="loginTab" class="tab-content active">
+                <h2>Iniciar Sesión</h2>
+                <input type="email" id="emailLogin" placeholder="Correo electrónico">
+                <input type="password" id="passwordLogin" placeholder="Contraseña">
+                <button onclick="iniciarSesion()" class="btn-primary">Ingresar</button>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div id="registroTab" class="tab-content">
+                <h2>Crear Cuenta</h2>
+                <input type="text" id="nombre" placeholder="Nombre completo">
+                <input type="email" id="emailRegistro" placeholder="Correo electrónico">
+                <input type="password" id="passwordRegistro" placeholder="Contraseña (mínimo 6 caracteres)">
+                <button onclick="crearCuenta()" class="btn-primary">Registrarse</button>
+            </div>
+
+            <!-- Mensajes -->
+            <p id="mensaje" class="message"></p>
+            <p id="mensajeLogin" class="message"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        function mostrarTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            if(tab === 'login') {
+                document.getElementById('loginTab').classList.add('active');
+                document.querySelector('.tab-btn').classList.add('active');
+            } else {
+                document.getElementById('registroTab').classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
